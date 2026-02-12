@@ -92,14 +92,15 @@ export function initScrollDetector(options = {}) {
     // Track reaching the top (before minDelta filter so small arrivals register)
     if (y <= 0) wasAtTop = true;
 
-    // Ignore tiny movement / jitter
-    if (Math.abs(delta) < cfg.minDeltaPx) return;
-
-    // Leaving the top going down — reset so this departure is instant
+    // Leaving the top going down — reset immediately, before minDelta filter
     if (wasAtTop && delta > 0) {
       hasBeenRevealed = false;
       wasAtTop = false;
+      if (cfg.departingTop) setState('departingTop', true);
     }
+
+    // Ignore tiny movement / jitter
+    if (Math.abs(delta) < cfg.minDeltaPx) return;
 
     const dir = delta > 0 ? 'down' : 'up';
 
