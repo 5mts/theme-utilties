@@ -42,6 +42,7 @@ export function initScrollDetector(options = {}) {
   let ticking = false;
   let currentScrollDir = 'up';
   let hasBeenRevealed = false;
+  let wasAtTop = lastY <= 0;
 
   const getScrollHeight = () => Math.max(
     document.body.scrollHeight,
@@ -88,11 +89,17 @@ export function initScrollDetector(options = {}) {
     const maxScroll = scrollHeight - viewportHeight;
     const zoneThresholdPx = viewportHeight * cfg.zoneThreshold;
 
+    // Track reaching the top (before minDelta filter so small arrivals register)
+    if (y <= 0) wasAtTop = true;
+
     // Ignore tiny movement / jitter
     if (Math.abs(delta) < cfg.minDeltaPx) return;
 
-    // Back at the top — reset so next departure is instant again
-    if (y <= cfg.edgeThresholdPx) hasBeenRevealed = false;
+    // Leaving the top going down — reset so this departure is instant
+    if (wasAtTop && delta > 0) {
+      hasBeenRevealed = false;
+      wasAtTop = false;
+    }
 
     const dir = delta > 0 ? 'down' : 'up';
 
