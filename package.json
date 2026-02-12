@@ -1,6 +1,6 @@
 {
   "name": "@5mts/theme-utilities",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Lightweight utility modules for WordPress themes",
   "type": "module",
   "main": "src/index.js",
