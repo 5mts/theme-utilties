@@ -66,7 +66,7 @@ class SvgLogoInliner
     private static function parseImgAttributes(string $imgTag): array
     {
         $attributes = [];
-        $preserve = ['class', 'id', 'style'];
+        $preserve = ['class', 'id', 'style', 'width', 'height'];
 
         foreach ($preserve as $attr) {
             if (preg_match('/\b' . preg_quote($attr, '/') . '="([^"]*)"/i', $imgTag, $match)) {
@@ -109,6 +109,14 @@ class SvgLogoInliner
 
         if (!empty($attributes['style'])) {
             $inject .= ' style="' . esc_attr($attributes['style']) . '"';
+        }
+
+        if (!empty($attributes['width'])) {
+            $inject .= ' width="' . esc_attr($attributes['width']) . '"';
+        }
+
+        if (!empty($attributes['height'])) {
+            $inject .= ' height="' . esc_attr($attributes['height']) . '"';
         }
 
         // Accessibility: alt text becomes aria-label, add role="img"
